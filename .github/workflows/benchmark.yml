@@ -1,6 +1,6 @@
 name: Benchmark (live models, free runners)
 # 1.5.150 (Copilot, ANALYSIS-1.5.148 M3): the settings in the title, so runs that differ in one can be told apart in the list
-run-name: "Benchmark ${{ inputs.suite }}${{ inputs.tasks && format(' ({0})', inputs.tasks) || '' }} x${{ inputs.repeat }} · ${{ inputs.models }} · ask=${{ inputs.ask_check }} cause=${{ inputs.cause_first }} scope=${{ inputs.scope_check }} variety=${{ inputs.variety }} look=${{ inputs.look }}${{ inputs.verify == '1' && ' verify=1' || '' }}${{ inputs.premise == '1' && ' premise=1' || '' }}${{ inputs.explore == '1' && ' explore=1' || '' }}${{ inputs.embed && format(' embed={0}', inputs.embed) || '' }}${{ inputs.helper && format(' helper={0}', inputs.helper) || '' }}"
+run-name: "Benchmark ${{ inputs.edition }} ${{ inputs.suite }}${{ inputs.tasks && format(' ({0})', inputs.tasks) || '' }} x${{ inputs.repeat }} · ${{ inputs.models }} · cause=${{ inputs.cause_first }} scope=${{ inputs.scope_check }} variety=${{ inputs.variety }} look=${{ inputs.look }}${{ inputs.verify == '1' && ' verify=1' || '' }}${{ inputs.premise == '1' && ' premise=1' || '' }}${{ inputs.explore == '1' && ' explore=1' || '' }}${{ inputs.helper && format(' helper={0}', inputs.helper) || '' }}"
 
 # A public copy of PocketIDE's benchmark workflow: GitHub's runners are free and unlimited for public repositories (4 CPUs, 16 GB)
 # where the private repositories get 2 CPUs and 8 GB from a monthly allowance. The app's code stays private: each job checks it
@@ -104,19 +104,6 @@ on:
         default: "0"
       variety:
         description: "Code that reads outside input (CSV, web pages): try it on other shapes before finishing (InputVariety, 1.5.154): 0 = off as in the app, 1 = on"
-        type: choice
-        options: ["0", "1"]
-        default: "0"
-      embed:
-        description: "Search by meaning for find_code and empty searches: an embeddings model, provider:model (e.g. cloudflare:@cf/baai/bge-base-en-v1.5); empty = keyword only (1.5.141)"
-        default: ""
-      route:
-        description: "Reading rounds use the helper model too (phase routing): 1 = on, 0 = off"
-        type: choice
-        options: ["0", "1"]
-        default: "0"
-      ask_check:
-        description: "Check a request with several asks ask by ask before finishing (AskLedger, 1.5.138): 0 = off as on the phone (since 1.5.145), 1 = on to compare"
         type: choice
         options: ["0", "1"]
         default: "0"
@@ -323,7 +310,7 @@ jobs:
           POCKETIDE_BENCH_SECOND_TRY: ${{ inputs.second_try }}
           POCKETIDE_BENCH_ESCALATE: ${{ inputs.escalate }}
           POCKETIDE_BENCH_HELPER: ${{ inputs.helper }}
-          POCKETIDE_BENCH_EMBED: ${{ inputs.embed }}
+          POCKETIDE_BENCH_EMBED: ''
           POCKETIDE_BENCH_CAUSE_FIRST: ${{ inputs.cause_first }}
           POCKETIDE_BENCH_VARIETY: ${{ inputs.variety }}
           POCKETIDE_BENCH_SCOPE: ${{ inputs.scope_check }}
@@ -331,10 +318,10 @@ jobs:
           POCKETIDE_BENCH_PREMISE: ${{ inputs.premise }}
           POCKETIDE_BENCH_EXPLORE: ${{ inputs.explore }}
           POCKETIDE_BENCH_LOOK: ${{ inputs.look }}
-          POCKETIDE_BENCH_ROUTE: ${{ inputs.route }}
+          POCKETIDE_BENCH_ROUTE: '0'
           POCKETIDE_BENCH_MAX_TOKENS: ${{ inputs.max_tokens }}
           POCKETIDE_BENCH_SMALL: ${{ inputs.small }}
-          POCKETIDE_BENCH_ASK_CHECK: ${{ inputs.ask_check }}
+          POCKETIDE_BENCH_ASK_CHECK: '0'
           POCKETIDE_BENCH_TIMEOUT: ${{ inputs.task_seconds }}
           EFFORT: ${{ inputs.effort }}
           POCKETIDE_BENCH_OUT: ${{ runner.temp }}/bench-out
